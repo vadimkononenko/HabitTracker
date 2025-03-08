@@ -9,24 +9,16 @@ import SwiftUI
 
 @main
 struct HabitTrackerApp: App {
+    
+    @StateObject private var habitsViewModel = HabitsViewModel(coreDataManager: CoreDataManager.shared)
+    @StateObject private var allHabitsViewModel = AllHabitsCompletionViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            TabView {
-                HabitsView()
-                    .tabItem {
-                        Label("Habits", systemImage: "calendar")
-                    }
-                
-                HabitsProgressView()
-                    .tabItem {
-                        Label("Progress", systemImage: "chart.pie")
-                    }
-                
-                SettingsView()
-                    .tabItem {
-                        Label("Settings", systemImage: "gear")
-                    }
-            }
+            HabitsView()
+                .environmentObject(habitsViewModel)
+                .environmentObject(allHabitsViewModel)
+                .environment(\.managedObjectContext, CoreDataManager.shared.viewContext)
         }
     }
 }

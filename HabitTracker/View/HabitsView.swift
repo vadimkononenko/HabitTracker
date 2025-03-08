@@ -8,11 +8,31 @@
 import SwiftUI
 
 struct HabitsView: View {
+    
+    @EnvironmentObject var viewModel: HabitsViewModel
+    
+    @State private var isShowCreatingHabitView: Bool = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            VStack {
+                AllHabitsCompletionView()
+                
+                HabitsListView()
+            }
+            .padding(.horizontal)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isShowCreatingHabitView.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $isShowCreatingHabitView) {
+                HabitCreateView()
+            }
+        }
     }
-}
-
-#Preview {
-    HabitsView()
 }

@@ -28,9 +28,26 @@ final class CoreDataManager {
         }
     }
     
-    func persist(in context: NSManagedObjectContext) throws {
-        if context.hasChanges {
-            try context.save()
+    func save() {
+        if viewContext.hasChanges {
+            do {
+                try viewContext.save()
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
         }
+    }
+    
+    // Preview Helper
+    static func preview() -> CoreDataManager {
+        let manager = CoreDataManager()
+        
+        let habit = Habit(context: manager.viewContext)
+        habit.id = UUID()
+        habit.title = "Don't eat after 6 p.m."
+        
+        manager.save()
+        
+        return manager
     }
 }
