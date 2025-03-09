@@ -17,8 +17,6 @@ class HabitsViewModel: ObservableObject {
     init(coreDataManager: CoreDataManager) {
         self.coreDataManager = coreDataManager
         self.fetchHabits()
-        
-        print(habits.count)
     }
     
     func fetchHabits() {

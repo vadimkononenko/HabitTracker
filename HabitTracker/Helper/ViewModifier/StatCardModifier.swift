@@ -15,8 +15,6 @@ struct StatCardModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .frame(maxWidth: .infinity)
-            .frame(height: 40)
             .background(Color.white)
             .cornerRadius(10)
             .foregroundColor(

@@ -12,69 +12,74 @@ struct HabitItemView: View {
     var habit: Habit
     
     var body: some View {
-        VStack(alignment: .leading) {
+        HStack {
             VStack {
-                Text(habit.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(
-                        Color(
-                            red: habit.colorR,
-                            green: habit.colorG,
-                            blue: habit.colorB
-                        )
-                    )
+                dayHabitView()
+                    .frame(maxWidth: .infinity, minHeight: 30, maxHeight: 40)
+                
+                HStack {
+                    streakView(streak: habit.streak,
+                               streakTitle: "Current")
+                    streakView(streak: habit.longestStreak,
+                               streakTitle: "Best")
+                    statsHabitView()
+                }
+                .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: .infinity)
-            .padding(10)
-            .background(.white)
+            .padding(8)
+            .background(Color(red: habit.colorR, green: habit.colorG, blue: habit.colorB).opacity(0.6))
             .cornerRadius(10)
-            .padding(.top, 16)
             
-            HStack {
-                createStreakView(streak: habit.streak,
-                                 streakTitle: "Current")
-                createStreakView(streak: habit.longestStreak,
-                                 streakTitle: "Best")
-                createStatsHabitView()
+            Button {
+                //TODO: finish logic of set status done for habit
+            } label: {
+                Image(systemName: "checkmark")
+                    .resizable()
+                    .frame(width: 16, height: 16)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .padding()
             }
-            .frame(maxWidth: .infinity)
-            .padding(.top, 8)
-            .padding(.bottom, 16)
+            .frame(maxWidth: 40, maxHeight: .infinity)
+            .padding(4)
+            .background(Color(red: habit.colorR, green: habit.colorG, blue: habit.colorB).opacity(0.6))
+            .cornerRadius(10)
         }
-        .padding(.horizontal, 8)
+    }
+    
+    func getTodayFormattedDate() -> String {
+        let todayDate = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM"
+        return dateFormatter.string(from: todayDate)
     }
 }
 
 extension HabitItemView {
     
     @ViewBuilder
-    func createDayHabitView(habitRecord: HabitRecord) -> some View {
-        VStack(alignment: .center) {
-            RoundedRectangle(cornerRadius: 5)
-                .fill(Color.green)
-                .frame(width: 25, height: 25)
-                .overlay {
-                    Image(systemName: "checkmark")
-                        .resizable()
-                        .frame(width: 10, height: 10)
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                }
-            
-            Text("Fr")
-                .font(.system(size: 14, weight: .light))
-            
-            Text("\(habitRecord.weekdayName)")
-                .font(.system(size: 16, weight: .regular))
-        }
+    func dayHabitView() -> some View {
+        Text(habit.title)
+            .fontWeight(.bold)
+            .foregroundColor(
+                Color(
+                    red: habit.colorR,
+                    green: habit.colorG,
+                    blue: habit.colorB
+                )
+            )
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(.white)
+            .cornerRadius(10)
     }
     
     @ViewBuilder
-    func createStreakView(streak: Int, streakTitle: String) -> some View {
+    func streakView(streak: Int, streakTitle: String) -> some View {
         HStack(alignment: .bottom) {
             Text("\(streak)")
-                .font(.system(size: 15, weight: .bold))
+                .font(.system(size: 14, weight: .bold))
         }
+        .frame(maxWidth: .infinity, minHeight: 30, maxHeight: 40)
         .streakCardStyle(red: habit.colorR, green: habit.colorG, blue: habit.colorB)
         .overlay(alignment: .top) {
             Text(streakTitle)
@@ -88,11 +93,12 @@ extension HabitItemView {
     }
     
     @ViewBuilder
-    func createStatsHabitView() -> some View {
+    func statsHabitView() -> some View {
         VStack {
             Text("Stats ->")
-                .font(.system(size: 10, weight: .regular))
+                .font(.system(size: 14, weight: .bold))
         }
+        .frame(maxWidth: .infinity, minHeight: 30, maxHeight: 40)
         .streakCardStyle(red: habit.colorR, green: habit.colorG, blue: habit.colorB)
     }
 }
